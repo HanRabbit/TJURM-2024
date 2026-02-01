@@ -9,6 +9,7 @@
 #include "threads/pipeline.h"
 #include "threads/control.h"
 #include "garage/garage.h"
+#include "data_manager/mvs_camera.h"
 
 void init_debug() {
     auto param = Param::get_instance();
@@ -62,7 +63,7 @@ bool init_camera() {
 
     // 获取相机数量
     int camera_num;
-    bool flag_camera = rm::getDaHengCameraNum(camera_num);
+    bool flag_camera = rm::getMVSCameraNum(camera_num);
     Data::camera.clear();
     Data::camera.resize(camera_num + 1, nullptr);
     if(!flag_camera) {
@@ -84,7 +85,7 @@ bool init_camera() {
         std::vector<double> camera_offset = (*param)["Car"]["CameraOffset"]["Base"];
 
         Data::camera[1] = new rm::Camera();
-        flag_camera = rm::openDaHeng(
+        flag_camera = rm::openMVS(
             Data::camera[1], 1, &Data::yaw, &Data::pitch, &Data::roll,
             false, exp, gain, rate);
 
@@ -98,9 +99,6 @@ bool init_camera() {
         rm::tf_rotate_pnp2head(Data::camera[1]->Rotate_pnp2head, camera_offset[3], camera_offset[4], 0.0);
         rm::tf_trans_pnp2head(Data::camera[1]->Trans_pnp2head, camera_offset[0], camera_offset[1], camera_offset[2], camera_offset[3], camera_offset[4], 0.0);
         rm::mallocYoloCameraBuffer(&Data::camera[1]->rgb_host_buffer, &Data::camera[1]->rgb_device_buffer, Data::camera[1]->width, Data::camera[1]->height);
-
-
-
     // 初始化双相机
     } else if (camera_num == 2) {
         double exp_base = (*param)["Camera"]["Base"]["ExposureTime"];
@@ -126,7 +124,7 @@ bool init_camera() {
         for(int i = 1; i <= camera_num; i++) {
             rm::message("begin open camera "+ std::to_string(i), rm::MSG_NOTE);
             Data::camera[i] = new rm::Camera();
-            flag_camera = rm::openDaHeng(Data::camera[i], i, &Data::yaw, &Data::pitch, &Data::roll);
+            flag_camera = rm::openMVS(Data::camera[i], i, &Data::yaw, &Data::pitch, &Data::roll);
 
             if(!flag_camera) {
                 rm::message("Failed to open camera: " + std::to_string(i), rm::MSG_ERROR);
@@ -136,7 +134,7 @@ bool init_camera() {
             if (Data::camera[i]->width == width_base) {
                 Data::camera_base = i;
                 Data::camera_index = i;
-                flag_camera = setDaHengArgs(Data::camera[i], exp_base, gain_base, rate_base);
+                flag_camera = rm::setMVSArgs(Data::camera[i], exp_base, gain_base, rate_base);
                 if(!flag_camera) {
                     rm::message("Failed to set camera args: " + std::to_string(i), rm::MSG_ERROR);
                     return false;
@@ -150,7 +148,7 @@ bool init_camera() {
 
             } else if (Data::camera[i]->width == width_far) {
                 Data::camera_far = i;
-                flag_camera = setDaHengArgs(Data::camera[i], exp_far, gain_far, rate_far);
+                flag_camera = rm::setMVSArgs(Data::camera[i], exp_far, gain_far, rate_far);
                 if(!flag_camera) {
                     rm::message("Failed to set camera args: " + std::to_string(i), rm::MSG_ERROR);
                     return false;
@@ -185,9 +183,9 @@ bool deinit_camera() {
             Data::camera[i]->rgb_device_buffer = nullptr;
         }
 
+        rm::closeMVS(Data::camera[i]);
         delete Data::camera[i];
         Data::camera[i] = nullptr;
-        rm::closeDaHeng();
     }
     rm::message("Camera deinit success", rm::MSG_WARNING);
     return true;

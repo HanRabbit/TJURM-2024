@@ -3,12 +3,19 @@ file(GLOB_RECURSE
         ${CMAKE_SOURCE_DIR}/src/data_manager/*.cpp
 )
 
+set(MVS_INCLUDE_DIR /opt/MVS/include)
+set(MVS_LIB_DIR /opt/MVS/lib/aarch64)
+include_directories(${MVS_INCLUDE_DIR})
+
 set(JSON_BuildTests OFF CACHE INTERNAL "")
 add_subdirectory(${CMAKE_SOURCE_DIR}/libs/json json_binary_dir)
 set(JSON_LIBS 
-        nlohmann_json::nlohmann_json
-        -lgxiapi
-        -lpthread
+    nlohmann_json::nlohmann_json
+    -lpthread
+)
+
+set(MVS_LIBS
+    ${MVS_LIB_DIR}/libMvCameraControl.so
 )
 
 
@@ -22,4 +29,5 @@ target_link_libraries(data_manager
         ${OpenCV_LIBS}
         ${OpenRM_LIBS}
         ${JSON_LIBS}
+    ${MVS_LIBS}
 )
