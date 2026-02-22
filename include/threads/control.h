@@ -41,9 +41,9 @@ public:
         return 0x00;
     }
     double get_yaw_omega() {
-        #if defined(TJURM_INFANTRY)
-        return static_cast<double>(this->state_bytes_.input_data.curr_omega);
-        #endif
+        // #if defined(TJURM_INFANTRY)
+        // return static_cast<double>(this->state_bytes_.input_data.curr_omega);
+        // #endif
         return 0.0;
     }
 

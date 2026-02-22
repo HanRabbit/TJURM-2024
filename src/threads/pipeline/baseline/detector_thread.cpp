@@ -14,7 +14,7 @@ void Pipeline::detector_baseline_thread(
     auto garage = Garage::get_instance();
 
     std::string yolo_type = (*param)["Model"]["YoloArmor"]["Type"];
-
+ 
     int    infer_width       = (*param)["Model"]["YoloArmor"][yolo_type]["InferWidth"];
     int    infer_height      = (*param)["Model"]["YoloArmor"][yolo_type]["InferHeight"];
     int    class_num         = (*param)["Model"]["YoloArmor"][yolo_type]["ClassNum"];

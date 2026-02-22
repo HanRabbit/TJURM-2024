@@ -18,7 +18,7 @@ struct MVSContext {
     float* yaw = nullptr;
     float* pitch = nullptr;
     float* roll = nullptr;
-    bool flip = false;
+    bool flip = true;
     uint32_t payload_size = 0;
     std::vector<uint8_t> bgr_buffer;
 };
@@ -98,9 +98,7 @@ void grab_loop(const std::shared_ptr<MVSContext>& ctx, rm::Camera* camera) {
             std::memcpy(image.data, ctx->bgr_buffer.data(), bgr_bytes);
         }
 
-        if (ctx->flip) {
-            cv::flip(image, image, -1);
-        }
+        cv::flip(image, image, -1);     // 翻转图像
 
         auto frame = std::make_shared<rm::Frame>();
         frame->image = std::make_shared<cv::Mat>(image);

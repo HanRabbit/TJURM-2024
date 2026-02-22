@@ -69,6 +69,7 @@ void Control::state() {
     // 通过电控获取敌方颜色
     Data::enemy_color = get_enemy();
     Data::self_color = (Data::enemy_color == rm::ARMOR_COLOR_BLUE) ? rm::ARMOR_COLOR_RED : rm::ARMOR_COLOR_BLUE;
+    // printf("enemy color: %d, self color: %d\n", Data::enemy_color, Data::self_color);
 
     // 确定自瞄状态，开始录制
     if (Data::auto_capture && !get_autoaim()) pipeline->start_record();
@@ -88,7 +89,6 @@ void Control::state() {
     else Data::target_id = rm::ARMOR_ID_UNKNOWN;
     
     Data::state = get_state();
-    // Data::state = 2;
 
     #ifdef TJURM_SENTRY
     if (Data::target_id != rm::ARMOR_ID_TOWER) {
@@ -203,7 +203,7 @@ void Control::send_thread() {
             fly_delay = getFlyDelay(target_yaw, target_pitch, shoot_speed, pose(0, 0), pose(1, 0), pose(2, 0));
             fire = objptr->getTarget(pose, fly_delay, rotate_delay, shoot_delay);
         }
-        rm::message("target pitch b", target_pitch);
+        // printf("target pitch b", target_pitch);
         Data::target_dist = sqrt(pow(pose(0, 0), 2) + pow(pose(1, 0), 2) + pow(pose(2, 0), 2));
         
         // 如果返回坐标为0, 确定控制信号

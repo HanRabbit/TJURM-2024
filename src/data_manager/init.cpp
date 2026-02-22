@@ -204,7 +204,7 @@ void init_serial() {
         #endif
 
         #if defined(TJURM_BALANCE) || defined(TJURM_INFANTRY) || defined(TJURM_DRONSE) || defined(TJURM_SENTRY)
-        status = (int)rm::getSerialPortList(port_list, rm::SERIAL_TYPE_TTY_USB);
+        status = (int)rm::getSerialPortList(port_list, rm::SERIAL_TYPE_TTY_ACM);
         #endif
 
         if (status != 0 || port_list.empty()) {

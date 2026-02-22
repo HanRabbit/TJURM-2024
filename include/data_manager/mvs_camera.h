@@ -19,9 +19,9 @@ bool openMVS(
     float* yaw = nullptr,
     float* pitch = nullptr,
     float* roll = nullptr,
-    bool flip = false,
-    double exposure = 2000.0,
-    double gain = 15.0,
+    bool flip = true,
+    double exposure = 3000.0,
+    double gain = 30.0,
     double fps = 200.0);
 
 bool closeMVS(Camera* camera);

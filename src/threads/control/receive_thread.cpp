@@ -45,8 +45,9 @@ void Control::receive_thread() {
             continue;
         }
 
-        if (!verify_crc16_check_sum((uint8_t*)buffer, sizeof(StateBytes))) {
-            rm::message("Control error: crc16 error", rm::MSG_ERROR);
+        if (!verify_crc16_check_sum((uint8_t *)buffer, sizeof(StateBytes))) {
+            rm::message("Control error: crc16 error: ", rm::MSG_ERROR);
+            print_bytes(buffer, sizeof(StateBytes));
             continue;
         }
 
@@ -86,6 +87,7 @@ void Control::receive_thread() {
 
         #if defined(TJURM_INFANTRY) || defined(TJURM_BALANCE)
         Data::yaw_omega = get_yaw_omega();
+        // Data::yaw_omega = 0.0;
         #endif
 
         tp = getTime();
