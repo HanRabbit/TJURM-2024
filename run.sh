@@ -1,5 +1,8 @@
 #!/bin/bash
 
+echo nvidia | sudo -S /usr/sbin/nvpmodel -m 2
+echo nvidia | sudo -S /usr/bin/jetson_clocks --fan
+
 blue="\033[1;34m"
 yellow="\033[1;33m"
 reset="\033[0m"

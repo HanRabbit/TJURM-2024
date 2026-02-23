@@ -235,6 +235,6 @@ void Control::send_thread() {
         bool autoaim_flag = get_autoaim();
 
         fire = (fire && start_delay_flag && autoaim_flag && Data::auto_fire);
-        send_single(target_yaw, target_pitch, fire, Data::target_id);
+        send_single(target_yaw, target_pitch + 0.9, fire, Data::target_id);
     }
 }
