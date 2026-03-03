@@ -17,7 +17,7 @@ public:
         return instance;
     }
     double get_yaw() {
-        return static_cast<double>(this->state_bytes_.input_data.curr_yaw);
+        return static_cast<double>(this->state_bytes_.input_data.curr_yaw) + 0.03f;
     }
     double get_pitch() {
         return static_cast<double>(this->state_bytes_.input_data.curr_pitch - 0.9);
@@ -31,7 +31,7 @@ public:
         #endif
     }
     rm::ArmorColor get_enemy() {
-        return static_cast<rm::ArmorColor>(this->state_bytes_.input_data.enemy_color);
+        return static_cast<rm::ArmorColor>(!this->state_bytes_.input_data.enemy_color);
     }
     uint8_t get_state() {
         #if defined(TJURM_INFANTRY) || defined(TJURM_BALANCE) || defined(TJURM_HERO) || defined(TJURM_DRONSE)
