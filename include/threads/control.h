@@ -17,7 +17,7 @@ public:
         return instance;
     }
     double get_yaw() {
-        return static_cast<double>(this->state_bytes_.input_data.curr_yaw) + 0.03f;
+        return static_cast<double>(this->state_bytes_.input_data.curr_yaw) + 0.03;
     }
     double get_pitch() {
         return static_cast<double>(this->state_bytes_.input_data.curr_pitch - 0.9);
