@@ -17,10 +17,10 @@ public:
         return instance;
     }
     double get_yaw() {
-        return static_cast<double>(this->state_bytes_.input_data.curr_yaw) + 0.03;
+        return static_cast<double>(this->state_bytes_.input_data.curr_yaw);
     }
     double get_pitch() {
-        return static_cast<double>(this->state_bytes_.input_data.curr_pitch - 0.9);
+        return static_cast<double>(this->state_bytes_.input_data.curr_pitch);
     }
     double get_roll() {
         #if defined(TJURM_INFANTRY) || defined(TJURM_BALANCE) || defined(TJURM_HERO) || defined(TJURM_SENTRY)
@@ -42,7 +42,7 @@ public:
     }
     double get_yaw_omega() {
         #if defined(TJURM_INFANTRY)
-        return static_cast<double>(this->state_bytes_.input_data.curr_omega) * 0;
+        return static_cast<double>(this->state_bytes_.input_data.curr_omega);
         #endif
         return 0.0;
     }

@@ -7,15 +7,24 @@
 #include <string>
 #include <thread>
 #include <cstring>
+#include <cmath>
 #include <unistd.h>
 
 using namespace rm;
 
+namespace {
+    double unwarp_to_near(double angle, double reference) {
+        constexpr double kTwoPi = M_PI * 2;
+        return reference + std::remainder(angle - reference, kTwoPi);
+    }
+}
+
 void Control::send_single(double yaw, double pitch, bool fire, rm::ArmorID id) {
     if (!Data::serial_flag) return;
+    double yaw_cmd = unwarp_to_near(yaw, get_yaw());
     
     operate_bytes_.frame_header.sof = SOF;
-    operate_bytes_.output_data.shoot_yaw = static_cast<float>(yaw);
+    operate_bytes_.output_data.shoot_yaw = static_cast<float>(yaw_cmd);
     operate_bytes_.output_data.shoot_pitch = static_cast<float>(pitch);
     operate_bytes_.output_data.fire = fire;
 
