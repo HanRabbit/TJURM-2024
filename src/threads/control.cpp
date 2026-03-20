@@ -34,7 +34,7 @@ void Control::send_single(double yaw, double pitch, bool fire, rm::ArmorID id) {
 
     append_crc16_check_sum((uint8_t*)&operate_bytes_, sizeof(OperateBytes));
     int status = (int)rm::writeToSerialPort((uint8_t*)&operate_bytes_, sizeof(operate_bytes_), file_descriptor_);
-    // printf("send: yaw: %.2f, pitch: %.2f, fire: %d, get yaw: %.2f\n", yaw, pitch, fire, get_yaw());
+    
     if (status) {
         rm::message("Control error: " + std::to_string(status), rm::MSG_ERROR);
         if (access(port_name_.c_str(), F_OK) < 0) {
